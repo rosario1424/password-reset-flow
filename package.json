@@ -1,0 +1,19 @@
+{
+  "name": "password-reset-be",
+  "version": "1.0.0",
+  "description": "Backend for password reset Application with role based Authentication",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rosario1424/password-reset-flow.git"
+  },
+  "author": "Divia Rozario",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rosario1424/password-reset-flow/issues"
+  },
+  "homepage": "https://github.com/rosario1424/password-reset-flow#readme"
+}
