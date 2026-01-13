@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: 'https://password-reset-fl.netlify.app',
   credentials: true
 }));
 //app.use(cors({origin: allowedOrigins, credentials: true}))
