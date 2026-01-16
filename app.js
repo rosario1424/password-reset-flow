@@ -9,6 +9,46 @@ const app = express();
 
 app.use(logger);
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://password-reset-fl.netlify.app'
+];
+
+app.use(express.json());
+app.use(cookieParser());
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // allow Postman
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
+
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/auth', userRouter);
+
+module.exports = app;
+
+
+
+
+
+/*const express = require('express');
+const authRouter = require('./routes/authRoutes');
+const cookieParser = require('cookie-parser');
+const userRouter = require('./routes/userRoutes');
+const logger = require('./utils/logger');
+const cors = require('cors');
+
+const app = express();
+
+app.use(logger);
+
 const allowedOrigins = ['http://localhost:5173/']
 
 app.use(express.json());
@@ -25,4 +65,39 @@ app.use(cors({
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/auth', userRouter);
 
-module.exports = app;
+module.exports = app;*/
+
+
+
+/*const express = require('express');
+const authRouter = require('./routes/authRoutes');
+const cookieParser = require('cookie-parser');
+const userRouter = require('./routes/userRoutes');
+const logger = require('./utils/logger');
+const cors = require('cors');
+
+const app = express();
+
+// Logger middleware
+app.use(logger);
+
+// Parse JSON & cookies
+app.use(express.json());
+app.use(cookieParser());
+
+// CORS configuration
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://password-reset-fl.netlify.app'
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
+
+// Routes
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/users', userRouter); // changed base path
+
+module.exports = app;*/
