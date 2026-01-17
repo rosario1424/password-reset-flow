@@ -219,13 +219,24 @@ export const verifyEmail = async (req, res) => {
 }
 
 // Check if user is authenticate
-export const isAccountVerified = async (req, res)=> {
+export const isAccountVerified = async (req, res) => {
+  try {
+    if (!req.user?.userId) {
+      return res.json({ success: false });
+    }
+    return res.json({ success: true });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
+/*export const isAccountVerified = async (req, res)=> {
     try {
         return res.json({ success: true});
     } catch (error) {
         res.json({ success: false, message: error.message });
     }
-}
+}*/
 
 // send password reset otp
 export const sendResetOtp = async (req, res)=> {
