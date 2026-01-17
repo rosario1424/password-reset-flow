@@ -30,7 +30,8 @@ app.use(cors({
 }));
 
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/auth', userRouter);
+app.use('/api/v1/user', userRouter);
+//app.use('/api/v1/auth', userRouter);
 
 module.exports = app;
 
