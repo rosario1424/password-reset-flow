@@ -2,6 +2,36 @@ import express from 'express';
 import authRouter from './routes/authRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import logger from './utils/logger.js';
+import cors from 'cors';
+
+const app = express();
+
+app.use(logger);
+app.use(express.json());
+
+// ✅ Clean Bearer-token CORS config
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://password-reset-fl.netlify.app"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/user', userRouter);
+
+export default app;
+
+
+
+
+
+/*import express from 'express';
+import authRouter from './routes/authRoutes.js';
+import userRouter from './routes/userRoutes.js';
+import logger from './utils/logger.js';
 
 import cookieParser from 'cookie-parser';
 
@@ -11,11 +41,14 @@ const app = express();
 
 app.use(logger);
 
-const allowedOrigins = [
-  'http://localhost:5173',
-  'https://password-reset-fl.netlify.app'
-];
 
+
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://password-reset-fl.netlify.app"
+  ]
+}));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -30,7 +63,7 @@ app.use(cors({
     }
   },
   credentials: true
-  
+
 /*app.use(cors({
   origin: function (origin, callback) {
     if (!origin) return callback(null, true); // allow Postman
@@ -40,13 +73,13 @@ app.use(cors({
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true*/
+  credentials: true
 }));
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/user', userRouter);
 
-export default app;
+export default app;*/
 
 
 
