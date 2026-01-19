@@ -16,8 +16,16 @@ app.use(cors({
     "https://password-reset-fl.netlify.app"
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: false
 }));
+
+app.use((req, res, next) => {
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
+  next();
+});
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/user', userRouter);
