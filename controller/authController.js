@@ -1,7 +1,9 @@
 import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken';
 import userModel from "../models/userModel.js";
-import transporter from "../utils/nodemailer.js";
+import { sendBrevoEmail } from "../utils/brevoMailer.js";
+
+//import transporter from "../utils/nodemailer.js";
  
 
 /* ================= REGISTER ================= */
@@ -47,12 +49,21 @@ export const register = async (req, res) => {
     );
 
     // Send welcome email (non-blocking)
-    transporter.sendMail({
+
+     sendBrevoEmail({
+       to: email,
+       subject: "Welcome to GreatStack",
+       textContent: `Welcome to GreatStack. Your account has been created with ${email}`,
+       htmlContent: `<h2>Welcome to GreatStack</h2><p>Your account has been created with ${email}</p>`,
+       }).catch(err => console.error("Welcome email failed:", err.message));
+
+
+    /*transporter.sendMail({
       from: process.env.SENDER_EMAIL,
       to: email,
       subject: "Welcome to GreatStack",
       text: `Welcome to GreatStack. Your account has been created with ${email}`
-    }).catch(err => console.error("Email failed:", err.message));
+    }).catch(err => console.error("Email failed:", err.message));*/
 
     // ✅ Send response only once, at the end
     return res.status(201).json({
@@ -285,12 +296,20 @@ export const sendVerifyOtp = async (req, res) => {
 
         await user.save();
 
-        await transporter.sendMail({
+        await sendBrevoEmail({
+          to: user.email,
+          subject: "Account Verification OTP",
+          textContent: `Your OTP is ${otp}. Verify your account using this OTP.`,
+          htmlContent: `<p>Your OTP is <b>${otp}</b>. Verify your account using this OTP.</p>`,
+        });
+
+
+        /*await transporter.sendMail({
             from: process.env.SENDER_EMAIL,
             to: user.email,
             subject: "Account Verification OTP",
             text: `Your OTP is ${otp}. Verify your account using this OTP.`
-        });
+        });*/
 
         return res.json({ success: true, message: 'Verification OTP sent on Email' });
 
@@ -337,7 +356,25 @@ export const verifyEmail = async (req, res) => {
 }
 
 // Check if user is authenticate
+
 export const isAccountVerified = async (req, res) => {
+  try {
+    const user = await userModel.findById(req.user.userId);
+
+    if (!user) {
+      return res.json({ success: false });
+    }
+
+    return res.json({
+      success: true,
+      isAccountVerified: user.isAccountVerified,
+    });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
+/*export const isAccountVerified = async (req, res) => {
   try {
     if (!req.user?.userId) {
       return res.json({ success: false });
@@ -346,7 +383,7 @@ export const isAccountVerified = async (req, res) => {
   } catch (error) {
     res.json({ success: false, message: error.message });
   }
-};
+};*/
 
 /*export const isAccountVerified = async (req, res)=> {
     try {
@@ -378,15 +415,23 @@ export const sendResetOtp = async (req, res)=> {
 
      await user.save();
 
-     const mailOption = {
+     await sendBrevoEmail({
+       to: user.email,
+       subject: "Password Reset OTP",
+       textContent: `Your OTP for resetting your password is ${otp}`,
+       htmlContent: `<p>Your OTP for resetting your password is <b>${otp}</b></p>`,
+     });
+
+
+     /*const mailOption = {
          from: process.env.SENDER_EMAIL,
          to: user.email,
          subject: "Password Reset    OTP",
          text: `Your OTP for resetting your password is ${otp}.
          Use this OTP to proceed with resetting your password.`
-     }
+     }*/
 
-     await transporter.sendMail(mailOption);
+     //await transporter.sendMail(mailOption);
 
      return res.json({ success: true, message: 'OTP sent to your email'})
 
