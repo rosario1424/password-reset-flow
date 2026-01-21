@@ -11,13 +11,11 @@ app.use(express.json());
 
 // ✅ Clean Bearer-token CORS config
 app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://password-reset-fl.netlify.app"
-  ],
+  origin:"https://password-reset-fl.netlify.app",
+
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: false
+  
 }));
 
 app.use((req, res, next) => {
