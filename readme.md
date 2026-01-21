@@ -1,3 +1,5 @@
+URL for published documentation : https://documenter.getpostman.com/view/49278169/2sBXViiqoM
+
 ## Password Reset – Backend (Node.js + Express)
 ## 📌 Overview
 
